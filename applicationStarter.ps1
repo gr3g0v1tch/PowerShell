@@ -38,8 +38,12 @@ $filepath = @(
             )
 For($i=0; $i -lt $filepath.Length; $i++)
 {
-    Invoke-Item $filepath[$i]
-    sleep(1)
+    if (Test-Path -Path $filepath[$i])
+    {
+        Invoke-Item $filepath[$i]
+        sleep(1)
+    }
+    else{"File "+$filepath[$i]+" not Found"}
 }
 
 #Backup folder from H: to U: every friday
