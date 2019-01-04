@@ -11,52 +11,75 @@ Date:
 #$text = 'test'
 #$text | Out-File 'file.txt'
 
-#Open IBM Lotus Notes
-Invoke-Item "*.nsf"
+#Call script functions
+LN_ON_NP_KP
+Firefox
+OpenExcelFiles
+BackupFiles 'H:\SOC' 'U:\'
 
-#Open OneNotes
-Invoke-Item "*.onetoc2"
+#Open IBM Lotus Notes, OneNotes, NotePad++, KeePass
+Function LN_ON_NP_KP {   
+    Invoke-Item "*.nsf"
 
+    Invoke-Item "*.onetoc2"
 
-#Open KeePass
-*\KeePass.exe ".kdbx"
+    #Launch NotePad++
+    *\Notepad++Portable.exe "*.py" 
+
+    #Open KeePass
+    *\KeePass.exe "*.kdbx"
+    #to open the commun KeePass
+    #H:\PortableApps\PortableApps\KeePass-2.34\KeePass.exe "S:\27-Telecom & Sécu\04-OCD -Sécurité (SECU)\Documentation reversibilité\BDD_MDP_I3T\Base_Commun_MDP_I3T.kdbx"
+}
 
 #Open usefull Firefox tabs when lauching the web browser
-$FirefoxTab = @(
-                "https://www.google.com",
-                )
-#sleep=4s to open a new tab instead of opening a new windows
-For($j=0; $j -lt $FirefoxTab.Length; $j++)
-{
-    *\FirefoxPortable.exe $FirefoxTab[$j]
-    sleep(5)
+Function Firefox {    
+    $FirefoxTab = @(
+                    "https://google.com",
+                  )
+    #sleep=5s to open a new tab instead of opening a new windows
+    For($j=0; $j -lt $FirefoxTab.Length; $j++)
+    {
+        *\FirefoxPortable.exe $FirefoxTab[$j]
+        sleep(5)
+    }
 }
 
 #Open Excel files
-$filepath = @(
-                #"*.xlsx",
-            )
-For($i=0; $i -lt $filepath.Length; $i++)
-{
-    if (Test-Path -Path $filepath[$i])
+Function OpenExcelFiles {
+    $filepath = @(
+                    "*.xlsx"
+                )
+    For($i=0; $i -lt $filepath.Length; $i++)
     {
-        Invoke-Item $filepath[$i]
-        sleep(1)
+        if (Test-Path -Path $filepath[$i])
+        {
+            Invoke-Item $filepath[$i]
+            sleep(1)
+        }
+        else{"File "+$filepath[$i]+" not Found"}
     }
-    else{"File "+$filepath[$i]+" not Found"}
 }
 
 #Backup folder from H: to U: every friday
-$date = get-date -f ddd
-if ($date -match 'ven')
-{
-    #syntax like "19900101"
-    $dateNum = Get-Date -UFormat %Y%m%d 
+#Two parameters, the source folder to zip and the destination with "\" at the end
+Function BackupFiles {
+
+    Param([string]$src, [string]$drive)
+
+    $date = get-date -f ddd
+    if ($date -match 'ven'){
     
-    $src = "WhatToSave"
-    $dst = "WhereToSave"+$dateNum+"_bck"+".zip"
+        #syntax like "19900101"
+        $dateNum = Get-Date -UFormat %Y%m%d 
     
-    #To zip file format
-    Add-Type -assembly "system.io.compression.filesystem"
-    [io.compression.zipfile]::CreateFromDirectory($src, $dst)
+        $dst = $drive+$dateNum+"_bckSOC"+".zip"
+    
+        #To zip files to the user network filesystem , used "system.io.compression" .NET class
+        #To load the assembly, command "Add-Type"
+        Add-Type -assembly "system.io.compression.filesystem"
+        #ZipFile only has static method so "::", no "New-Object"
+        [io.compression.zipfile]::CreateFromDirectory($src, $dst)
+    }
 }
+
