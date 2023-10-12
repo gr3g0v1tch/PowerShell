@@ -12,13 +12,13 @@ Date:
 #$text | Out-File 'file.txt'
 
 #Call script functions
-LN_ON_NP_KP
+Tools
 Firefox
 OpenExcelFiles
 BackupFiles 'H:\SOC' 'U:\'
 
 #Open IBM Lotus Notes, OneNotes, NotePad++, KeePass
-Function LN_ON_NP_KP {   
+Function Tools {   
     Invoke-Item "*.nsf"
 
     Invoke-Item "*.onetoc2"
