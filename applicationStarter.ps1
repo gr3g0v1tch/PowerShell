@@ -14,7 +14,7 @@ Date:
 #Call script functions
 Tools
 Firefox
-OpenExcelFiles
+Office
 BackupFiles 'H:\SOC' 'U:\'
 
 #Open IBM Lotus Notes, OneNotes, NotePad++, KeePass
@@ -44,7 +44,7 @@ Function Firefox {
 }
 
 #Open Excel files
-Function OpenExcelFiles {
+Function Office {
     $filepath = @(
                     "*.xlsx"
                 )
