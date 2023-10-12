@@ -28,8 +28,6 @@ Function Tools {
 
     #Open KeePass
     *\KeePass.exe "*.kdbx"
-    #to open the commun KeePass
-    #H:\PortableApps\PortableApps\KeePass-2.34\KeePass.exe "S:\27-Telecom & Sécu\04-OCD -Sécurité (SECU)\Documentation reversibilité\BDD_MDP_I3T\Base_Commun_MDP_I3T.kdbx"
 }
 
 #Open usefull Firefox tabs when lauching the web browser
